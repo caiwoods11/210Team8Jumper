@@ -1,5 +1,6 @@
 from itertools import count
 import random
+from re import X
 
 class Words:
     """The person hiding from the Seeker. 
@@ -17,10 +18,11 @@ class Words:
         Args:
             self (words): An instance of words.
         """
-        self._words = ["covid", "pineapple", "sponge", "temple", "spatula", "prophet"] # team mates add more
+        self._words = ["covide", "pineapple", "sponge", "temple", "spatulae", "prophet"] # team mates add more
         self._word = random.choice(self._words)
         self._letter = []
         self.hider = []   
+        
 
     def get_word(self):
         """Get Random Word  
@@ -37,23 +39,55 @@ class Words:
   
         for i in range (len(self._letter)):
             self.hider.append("_ ")
+        #print(self.hider) -- to check if it is converting to _
+
+        #return self._letter        
 
         hider_string = ""
         hider_string = hider_string.join(self.hider)
-        return hider_string
+        print( hider_string)
            
+    def display_word(self):
+        """ displays the _ _ _ _ _ _ _"""
+        
+        Words().hide_word() # To display the _ _ _ _ _ 
+        hider_string = ""
+        hider_string = hider_string.join(self.hider)
+        return hider_string
 
-
-    def get_letters(self): # find letter
+    def get_letters(self): #, letter_input):  find letter
         """search for a letter and return a number (number index)
         """
-        return (self._distance[-1] == 0)
+        Words().get_word()
+        #Words()._word()
+        # in director ask for the users input 
+        letter_input = input("Guess a letter: ")
+
+        # index_list = []
+        # for i in range (len(self._letter)):
+        #     if letter_input == self._letter[i]:
+        #         index_list.append(i)
+        #print (index_list)
+
+
+        index_list = []
+        for i in range (len(self._word)):
+            if letter_input == self._word[i]:
+                index_list.append(i)
+                #self.hider.append(letter_input) --test
+        return index_list
+        # return self.hider -- test
+
         
-    def replace_letter(self, seeker): # replace letter
+    def replace_letter(self,letter_input): # replace letter
         """use the number index to place the letter in the correct index
         """
-        distance = abs(self._location - seeker.get_location())
-        self._distance.append(distance)
+    
+        letter_reveal = []
+        for i in range (len(self._word)):
+            if letter_input == self._word[i]:
+                self.hider.append(self._letter) 
+        return self.hider
 
 
-print(Words().hide_word())
+print(Words().get_letters())
