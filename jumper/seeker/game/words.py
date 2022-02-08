@@ -55,39 +55,38 @@ class Words:
         hider_string = hider_string.join(self.hider)
         return hider_string
 
-    def get_letters(self): #, letter_input):  find letter
-        """search for a letter and return a number (number index)
-        """
-        Words().get_word()
-        #Words()._word()
-        # in director ask for the users input 
-        letter_input = input("Guess a letter: ")
+    # def get_letters(self): #, letter_input):  find letter
+    #     """search for a letter and return a number (number index)
+    #     """
+    #     Words().get_word()
+    #     #Words()._word()
+    #     # in director ask for the users input 
+    #     letter_input = input("Guess a letter: ")
 
-        # index_list = []
-        # for i in range (len(self._letter)):
-        #     if letter_input == self._letter[i]:
-        #         index_list.append(i)
-        #print (index_list)
+    #     # index_list = []
+    #     # for i in range (len(self._letter)):
+    #     #     if letter_input == self._letter[i]:
+    #     #         index_list.append(i)
+    #     #print (index_list)
 
 
-        index_list = []
-        for i in range (len(self._word)):
-            if letter_input == self._word[i]:
-                index_list.append(i)
-                #self.hider.append(letter_input) --test
-        return index_list
-        # return self.hider -- test
+    #     index_list = []
+    #     for i in range (len(self._word)):
+    #         if letter_input == self._word[i]:
+    #             index_list.append(i)
+    #             #self.hider.append(letter_input) --test
+    #     return index_list
+    #     # return self.hider -- test
 
         
-    def replace_letter(self,letter_input): # replace letter
+    def replace_letter(self, letter_input): # replace letter
         """use the number index to place the letter in the correct index
         """
-    
-        letter_reveal = []
+        #Words().display_word() -- to test
         for i in range (len(self._word)):
             if letter_input == self._word[i]:
-                self.hider.append(self._letter) 
+                self.hider[i] = letter_input 
         return self.hider
 
 
-print(Words().get_letters())
+# print(Words().replace_letter("e")) to test letter e
