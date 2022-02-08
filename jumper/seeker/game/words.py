@@ -14,11 +14,10 @@ class Words:
 
     def __init__(self):
         """Constructs a list of words
-
         Args:
             self (words): An instance of words.
         """
-        self._words = ["covide", "pineapple", "sponge", "temple", "spatulae", "prophet"] # team mates add more
+        self._words = ["covid", "pineapple", "sponge", "temple", "spatula", "prophet", "flood", "flower", "python", "rhythm"] # team mates add more
         self._word = random.choice(self._words)
         self._letter = []
         self.hider = []   
@@ -27,13 +26,11 @@ class Words:
     def get_word(self):
         """Get Random Word  
         """
-    
         return self._word
 
     def hide_word(self):
         """ Puts the _ _ _ _ _ _ _ down for the length of the random word
         """
-
         self._letter = list(self._word)
         #return self.letter
   
@@ -45,11 +42,10 @@ class Words:
 
         hider_string = ""
         hider_string = hider_string.join(self.hider)
-        print( hider_string)
+        print(hider_string)
            
     def display_word(self):
         """ displays the _ _ _ _ _ _ _"""
-        
         Words().hide_word() # To display the _ _ _ _ _ 
         hider_string = ""
         hider_string = hider_string.join(self.hider)
@@ -88,6 +84,7 @@ class Words:
             if letter_input == self._word[i]:
                 self.hider.append(self._letter) 
         return self.hider
+
 
 
 print(Words().get_letters())
