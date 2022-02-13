@@ -1,66 +1,51 @@
-from game.terminal_service import TerminalService
-from game.parachute import Parachute
 from game.words import Words
+from game.parachute import Parachute
 
 
 class Director:
-    """A person who directs the game. 
-    
-    The responsibility of a Director is to control the sequence of play.
-
-    Attributes:
-        hider (Hider): The game's hider.
-        is_playing (boolean): Whether or not to keep playing.
-        seeker (Seeker): The game's seeker.
-        terminal_service: For getting and displaying information on the terminal.
-    """
 
     def __init__(self):
-        """Constructs a new Director.
-        
-        Args:
-            self (Director): an instance of Director.
-        """
-        self._hider = Hider()
         self._is_playing = True
-        self._seeker = Seeker()
-        self._terminal_service = TerminalService()
+        self._words = Words()
+        self._parachute = Parachute()
+
+        self._word = Words.select_word(self)
+        self._hidden_word = []
+        self._parts = Parachute.declare_parts(self)
+        self._wrong_guesses = []        
+        
         
     def start_game(self):
-        """Starts the game by running the main game loop.
+        self._display_word()
         
-        Args:
-            self (Director): an instance of Director.
-        """
-        while self._is_playing:
-            self._get_inputs()
-            self._do_updates()
-            self._do_outputs()
+        while self._is_playing:         
+            self._display_parachute()
+            self._get_input()
+            self._check_end_game()
 
-    def _get_inputs(self):
-        """Moves the seeker to a new location.
+    def _display_word(self):
+        Words().display_hidden_word(self._word, self._hidden_word)
 
-        Args:
-            self (Director): An instance of Director.
-        """
-        new_location = self._terminal_service.read_number("\nEnter a location [1-1000]: ")
-        self._seeker.move_location(new_location)
-        
-    def _do_updates(self):
-        """Keeps watch on where the seeker is moving.
+    def _display_parachute(self):
+        if len(self._wrong_guesses) == 0:
+            Parachute().draw_parachute_full(self._parts)
+        if len(self._wrong_guesses) == 1:
+            Parachute().draw_parachute_1(self._parts)
+        if len(self._wrong_guesses) == 2:
+            Parachute().draw_parachute_2(self._parts)
+        if len(self._wrong_guesses) == 3:
+            Parachute().draw_parachute_3(self._parts)
+        if len(self._wrong_guesses) == 4:
+            Parachute().draw_parachute_4(self._parts)
+        if len(self._wrong_guesses) == 5:
+            Parachute().draw_parachute_5(self._parts)
+            print(f"Sorry! You died... the word was {self._word.upper()}")
+            exit()
 
-        Args:
-            self (Director): An instance of Director.
-        """
-        self._hider.watch_seeker(self._seeker)
-        
-    def _do_outputs(self):
-        """Provides a hint for the seeker to use.
 
-        Args:
-            self (Director): An instance of Director.
-        """
-        hint = self._hider.get_hint()
-        self._terminal_service.write_text(hint)
-        if self._hider.is_found():
-            self._is_playing = False
+    def _get_input(self):
+        Words().get_letter(self._word, self._hidden_word, self._wrong_guesses)
+                
+    def _check_end_game(self):
+        Words().game_over(self._is_playing, self._hidden_word)
+
