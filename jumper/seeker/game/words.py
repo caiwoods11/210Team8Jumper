@@ -1,90 +1,71 @@
-from itertools import count
 import random
-from re import X
+import subprocess as sp
 
 class Words:
-    """The person hiding from the Seeker. 
-    
-    The responsibility of Hider is to keep track of its location and distance from the seeker. 
-    
-    Attributes:
-        _location (int): The location of the hider (1-1000).
-        _distance (List[int]): The distance from the seeker.
-    """
 
     def __init__(self):
         """Constructs a list of words
         Args:
             self (words): An instance of words.
         """
-        self._words = ["covid", "pineapple", "sponge", "temple", "spatula", "prophet", "flood", "flower", "python", "rhythm"] # team mates add more
-        self._word = random.choice(self._words)
-        self._letter = []
-        self.hider = []   
+        pass
         
+    def select_word(self):
+        _words = ["covid", "pineapple", "sponge", "temple", "spatula", "prophet", "flood", "flower", "python", "rhythm"]
+        return random.choice(_words)
 
-    def get_word(self):
-        """Get Random Word  
-        """
-        return self._word
+    def display_hidden_word(self, _word, _hidden_word):
+        for i in range (len(_word)):
+            _hidden_word.append("_ ")
 
-    def hide_word(self):
-        """ Puts the _ _ _ _ _ _ _ down for the length of the random word
-        """
-        self._letter = list(self._word)
-        #return self.letter
-  
-        for i in range (len(self._letter)):
-            self.hider.append("_ ")
-        #print(self.hider) -- to check if it is converting to _
+        hidden_word_string = ""
+        hidden_word_string = hidden_word_string.join(_hidden_word)
+        print(hidden_word_string)
+        return(_hidden_word)   
 
-        #return self._letter        
+    def get_letter(self, _word, _hidden_word, _wrong_guesses):
 
-        hider_string = ""
-        hider_string = hider_string.join(self.hider)
-        print(hider_string)
-           
-    def display_word(self):
-        """ displays the _ _ _ _ _ _ _"""
-        Words().hide_word() # To display the _ _ _ _ _ 
-        hider_string = ""
-        hider_string = hider_string.join(self.hider)
-        return hider_string
+        letter_input = input("\nGuess a letter [a-z]: ")
 
-    def get_letters(self): #, letter_input):  find letter
-        """search for a letter and return a number (number index)
-        """
-        Words().get_word()
-        #Words()._word()
-        # in director ask for the users input 
-        letter_input = input("Guess a letter: ")
+        while (len(letter_input.lower()) > 1) or not (letter_input.isalpha()):
+            if (len(letter_input.lower()) > 1):
+                letter_input = input("\nHow about just one letter?: ")
 
-        # index_list = []
-        # for i in range (len(self._letter)):
-        #     if letter_input == self._letter[i]:
-        #         index_list.append(i)
-        #print (index_list)
+            if not letter_input.isalpha():
+                letter_input = input("\nDo you know what a letter is? Try again: ")
 
+        sp.call('cls', shell=True)
 
-        index_list = []
-        for i in range (len(self._word)):
-            if letter_input == self._word[i]:
-                index_list.append(i)
-                #self.hider.append(letter_input) --test
-        return index_list
-        # return self.hider -- test
+        for i in range (len(_word)):
+            if letter_input.lower() == _word[i]:
+                _hidden_word.pop(i)
+                _hidden_word.insert(i, letter_input.upper() + " ")
+        
+        if letter_input not in _word:            
+            if letter_input.lower() not in _wrong_guesses:
+                print(f"\nNope, {letter_input.upper()} is not there!")
+                _wrong_guesses.append(letter_input.lower())
+            else:
+                print(f"You have already guessed that {letter_input.lower()}!")
+        
+        if len(_wrong_guesses) > 0:
+            print(f"Current wrong guesses: {_wrong_guesses}")
+                  
+        print()
+        hidden_word_string = ""
+        hidden_word_string = hidden_word_string.join(_hidden_word)
+        print(hidden_word_string)
+
+        return _wrong_guesses
 
         
-    def replace_letter(self,letter_input): # replace letter
-        """use the number index to place the letter in the correct index
-        """
-    
-        letter_reveal = []
-        for i in range (len(self._word)):
-            if letter_input == self._word[i]:
-                self.hider.append(self._letter) 
-        return self.hider
-
-
-
-print(Words().get_letters())
+       
+    def game_over(self, _is_playing, _hidden_word):
+        _checker = "_ "
+        if _checker in _hidden_word:
+            _is_playing = True
+        else:
+            _is_playing = False
+            print("\nCongratulations! You Win!")
+            exit()
+        return _is_playing
