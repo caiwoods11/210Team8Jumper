@@ -8,28 +8,44 @@ class Director:
         self._is_playing = True
         self._words = Words()
         self._parachute = Parachute()
+
+        self._word = Words.select_word(self)
+        self._hidden_word = []
+        self._parts = Parachute.declare_parts(self)
+        self._wrong_guesses = []        
+        
         
     def start_game(self):
-        while self._is_playing:
-            self._get_word()
-            self._display_hidden_word()
+        self._display_word()
+        
+        while self._is_playing:         
             self._display_parachute()
-            self._letter_input()
+            self._get_input()
+            self._check_end_game()
 
-            self._end_game()
-
-    def _get_word(self):
-        new_word = self._words.get_word()
-        print(f"The new word is {new_word}")  # DELETE THIS WHE COMPLETE
-
-    def _display_hidden_word(self):
-        Words().hide_word()
+    def _display_word(self):
+        Words().display_hidden_word(self._word, self._hidden_word)
 
     def _display_parachute(self):
-        print(Parachute().draw_parachute())
-        
-    def _letter_input(self):
-        Words().get_letters()
+        if len(self._wrong_guesses) == 0:
+            Parachute().draw_parachute_full(self._parts)
+        if len(self._wrong_guesses) == 1:
+            Parachute().draw_parachute_1(self._parts)
+        if len(self._wrong_guesses) == 2:
+            Parachute().draw_parachute_2(self._parts)
+        if len(self._wrong_guesses) == 3:
+            Parachute().draw_parachute_3(self._parts)
+        if len(self._wrong_guesses) == 4:
+            Parachute().draw_parachute_4(self._parts)
+        if len(self._wrong_guesses) == 5:
+            Parachute().draw_parachute_5(self._parts)
+            print(f"Sorry! You died... the word was {self._word.upper()}")
+            exit()
 
-    def _end_game(self):
-        self._is_playing = False
+
+    def _get_input(self):
+        Words().get_letter(self._word, self._hidden_word, self._wrong_guesses)
+                
+    def _check_end_game(self):
+        Words().game_over(self._is_playing, self._hidden_word)
+
